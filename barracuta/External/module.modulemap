@@ -1,0 +1,12 @@
+module NSTaskBridge {
+    header "nstask.h"
+    export *
+}
+module RestoreBridge {
+    header "restore.h"
+    export *
+}
+module PogoHeaderBridge {
+    header "Pogo-BridgingHeader.h"
+    export *
+}
