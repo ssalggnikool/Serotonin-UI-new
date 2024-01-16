@@ -13,7 +13,8 @@
 		3306604E2B55F9CE004284FB /* ToolbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3306604D2B55F9CE004284FB /* ToolbarButton.swift */; };
 		330660502B560A2E004284FB /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3306604F2B560A2E004284FB /* Logger.swift */; };
 		330660522B561A56004284FB /* LicensesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330660512B561A56004284FB /* LicensesViewController.swift */; };
-		330660552B561B1D004284FB /* Markdownosaur in Resources */ = {isa = PBXBuildFile; fileRef = 330660542B561B1D004284FB /* Markdownosaur */; };
+		330660552B561B1D004284FB /* Markdownosaur.md in Resources */ = {isa = PBXBuildFile; fileRef = 330660542B561B1D004284FB /* Markdownosaur.md */; };
+		330660572B561BB8004284FB /* swift-markdown.md in Resources */ = {isa = PBXBuildFile; fileRef = 330660562B561BB8004284FB /* swift-markdown.md */; };
 		33904E9A2B53E0DD00C8EE40 /* OptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33904E992B53E0DD00C8EE40 /* OptionsViewController.swift */; };
 		33904E9C2B53E10000C8EE40 /* JailbreakViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33904E9B2B53E10000C8EE40 /* JailbreakViewController.swift */; };
 		33904E9E2B53E12900C8EE40 /* Design.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33904E9D2B53E12900C8EE40 /* Design.swift */; };
@@ -30,7 +31,8 @@
 		3306604D2B55F9CE004284FB /* ToolbarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarButton.swift; sourceTree = "<group>"; };
 		3306604F2B560A2E004284FB /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		330660512B561A56004284FB /* LicensesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicensesViewController.swift; sourceTree = "<group>"; };
-		330660542B561B1D004284FB /* Markdownosaur */ = {isa = PBXFileReference; lastKnownFileType = text; path = Markdownosaur; sourceTree = "<group>"; };
+		330660542B561B1D004284FB /* Markdownosaur.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Markdownosaur.md; sourceTree = "<group>"; };
+		330660562B561BB8004284FB /* swift-markdown.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "swift-markdown.md"; sourceTree = "<group>"; };
 		33904E992B53E0DD00C8EE40 /* OptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsViewController.swift; sourceTree = "<group>"; };
 		33904E9B2B53E10000C8EE40 /* JailbreakViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JailbreakViewController.swift; sourceTree = "<group>"; };
 		33904E9D2B53E12900C8EE40 /* Design.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Design.swift; sourceTree = "<group>"; };
@@ -85,7 +87,8 @@
 		330660532B561AD9004284FB /* Licenses */ = {
 			isa = PBXGroup;
 			children = (
-				330660542B561B1D004284FB /* Markdownosaur */,
+				330660542B561B1D004284FB /* Markdownosaur.md */,
+				330660562B561BB8004284FB /* swift-markdown.md */,
 			);
 			path = Licenses;
 			sourceTree = "<group>";
@@ -205,8 +208,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				330660552B561B1D004284FB /* Markdownosaur in Resources */,
+				330660552B561B1D004284FB /* Markdownosaur.md in Resources */,
 				5DF9D58B1F7B905700DE4C89 /* Assets.xcassets in Resources */,
+				330660572B561BB8004284FB /* swift-markdown.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
