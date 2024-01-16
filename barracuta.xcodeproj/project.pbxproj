@@ -10,6 +10,10 @@
 		330660472B543272004284FB /* cmark-gfm in Frameworks */ = {isa = PBXBuildFile; productRef = 330660462B543272004284FB /* cmark-gfm */; };
 		3306604A2B543283004284FB /* Markdown in Frameworks */ = {isa = PBXBuildFile; productRef = 330660492B543283004284FB /* Markdown */; };
 		3306604C2B54329C004284FB /* MD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3306604B2B54329C004284FB /* MD.swift */; };
+		3306604E2B55F9CE004284FB /* ToolbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3306604D2B55F9CE004284FB /* ToolbarButton.swift */; };
+		330660502B560A2E004284FB /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3306604F2B560A2E004284FB /* Logger.swift */; };
+		330660522B561A56004284FB /* LicensesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330660512B561A56004284FB /* LicensesViewController.swift */; };
+		330660552B561B1D004284FB /* Markdownosaur in Resources */ = {isa = PBXBuildFile; fileRef = 330660542B561B1D004284FB /* Markdownosaur */; };
 		33904E9A2B53E0DD00C8EE40 /* OptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33904E992B53E0DD00C8EE40 /* OptionsViewController.swift */; };
 		33904E9C2B53E10000C8EE40 /* JailbreakViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33904E9B2B53E10000C8EE40 /* JailbreakViewController.swift */; };
 		33904E9E2B53E12900C8EE40 /* Design.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33904E9D2B53E12900C8EE40 /* Design.swift */; };
@@ -23,6 +27,10 @@
 
 /* Begin PBXFileReference section */
 		3306604B2B54329C004284FB /* MD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MD.swift; sourceTree = "<group>"; };
+		3306604D2B55F9CE004284FB /* ToolbarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarButton.swift; sourceTree = "<group>"; };
+		3306604F2B560A2E004284FB /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		330660512B561A56004284FB /* LicensesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicensesViewController.swift; sourceTree = "<group>"; };
+		330660542B561B1D004284FB /* Markdownosaur */ = {isa = PBXFileReference; lastKnownFileType = text; path = Markdownosaur; sourceTree = "<group>"; };
 		33904E992B53E0DD00C8EE40 /* OptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsViewController.swift; sourceTree = "<group>"; };
 		33904E9B2B53E10000C8EE40 /* JailbreakViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JailbreakViewController.swift; sourceTree = "<group>"; };
 		33904E9D2B53E12900C8EE40 /* Design.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Design.swift; sourceTree = "<group>"; };
@@ -53,7 +61,9 @@
 		330660432B5431C3004284FB /* Tabs */ = {
 			isa = PBXGroup;
 			children = (
+				33904E9D2B53E12900C8EE40 /* Design.swift */,
 				33904E9B2B53E10000C8EE40 /* JailbreakViewController.swift */,
+				3306604D2B55F9CE004284FB /* ToolbarButton.swift */,
 				33904E992B53E0DD00C8EE40 /* OptionsViewController.swift */,
 				330660442B5431C9004284FB /* ViewsInOptions */,
 			);
@@ -63,18 +73,28 @@
 		330660442B5431C9004284FB /* ViewsInOptions */ = {
 			isa = PBXGroup;
 			children = (
+				330660532B561AD9004284FB /* Licenses */,
 				33904EA32B54121600C8EE40 /* AboutViewController.swift */,
+				330660512B561A56004284FB /* LicensesViewController.swift */,
 				33904EA52B54282F00C8EE40 /* ChangelogViewController.swift */,
 				3306604B2B54329C004284FB /* MD.swift */,
 			);
 			path = ViewsInOptions;
 			sourceTree = "<group>";
 		};
+		330660532B561AD9004284FB /* Licenses */ = {
+			isa = PBXGroup;
+			children = (
+				330660542B561B1D004284FB /* Markdownosaur */,
+			);
+			path = Licenses;
+			sourceTree = "<group>";
+		};
 		33904EA02B54043900C8EE40 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				33904E9D2B53E12900C8EE40 /* Design.swift */,
 				5DF9D5851F7B905700DE4C89 /* MainTabBarController.swift */,
+				3306604F2B560A2E004284FB /* Logger.swift */,
 				330660432B5431C3004284FB /* Tabs */,
 			);
 			path = UI;
@@ -185,6 +205,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				330660552B561B1D004284FB /* Markdownosaur in Resources */,
 				5DF9D58B1F7B905700DE4C89 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -196,7 +217,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				330660522B561A56004284FB /* LicensesViewController.swift in Sources */,
 				33904E9C2B53E10000C8EE40 /* JailbreakViewController.swift in Sources */,
+				330660502B560A2E004284FB /* Logger.swift in Sources */,
+				3306604E2B55F9CE004284FB /* ToolbarButton.swift in Sources */,
 				33904E9A2B53E0DD00C8EE40 /* OptionsViewController.swift in Sources */,
 				3306604C2B54329C004284FB /* MD.swift in Sources */,
 				33904EA22B54044800C8EE40 /* SettingsManager.swift in Sources */,

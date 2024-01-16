@@ -12,14 +12,14 @@ import UIKit
 class OptionsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
     var tableView: UITableView!
     var tableData = [
-        ["About"],
+        ["About", "Changelogs"],
         ["Beta iOS", "Verbose Boot", "Hide Internal Text"],
         ["PUAF Pages", "Static Headroom"],
         ["Set Defaults"]
     ]
 
     var sectionTitles = [
-        "\(Bundle.main.infoDictionary?["CFBundleName"] as? String ?? "")", "Options", "Exploit", ""
+        "", "Options", "Exploit", ""
     ]
     
     var settingsManager = SettingsManager.shared
@@ -50,7 +50,7 @@ class OptionsViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         let sectionTitle = sectionTitles[section]
-        if sectionTitle.isEmpty { return 0 }
+        if sectionTitle.isEmpty { return 20 }
         return 40
     }
     
@@ -73,20 +73,23 @@ class OptionsViewController: UIViewController, UITableViewDelegate, UITableViewD
         case "About":
             cell.accessoryType = .disclosureIndicator
             cell.selectionStyle = .default
+            
+        case "Changelogs":
+            cell.accessoryView = createAccessoryView(systemImageName: "doc.plaintext")
+            cell.selectionStyle = .default
 
         case "Set Defaults":
             cell.textLabel?.textColor = UIColor(named: "AccentColor")
             cell.selectionStyle = .default
             
         case "Static Headroom":
-            let stepper = UIStepper()
-            stepper.value = Double(settingsManager.staticHeadroom)
-            stepper.minimumValue = 0
-            stepper.maximumValue = 1920
-            stepper.stepValue = 128
-            stepper.addTarget(self, action: #selector(stepperValueChanged(_:)), for: .valueChanged)
+            let slider = UISlider()
+            slider.value = Float(settingsManager.staticHeadroom)
+            slider.minimumValue = 0
+            slider.maximumValue = 1920
+            slider.addTarget(self, action: #selector(sliderValueChanged(_:)), for: .valueChanged)
 
-            cell.accessoryView = stepper
+            cell.accessoryView = slider
             cell.detailTextLabel?.text = "\(settingsManager.staticHeadroom) MB"
             
         case "PUAF Pages":
@@ -95,6 +98,7 @@ class OptionsViewController: UIViewController, UITableViewDelegate, UITableViewD
             switchView.addTarget(self, action: #selector(switchChanged), for: .valueChanged)
             cell.accessoryView = switchView
             cell.detailTextLabel?.text = "3072"
+            // I have no idea how this works, but figure it out!
             
         case "Beta iOS", "Verbose Boot", "Hide Internal Text":
             let switchView = UISwitch()
@@ -109,21 +113,24 @@ class OptionsViewController: UIViewController, UITableViewDelegate, UITableViewD
         return cell
     }
     
-    @objc func stepperValueChanged(_ sender: UIStepper) {
-        let value = Int(sender.value)
+    @objc func sliderValueChanged(_ sender: UISlider) {
+        let step: Float = 128
+        let roundedValue = round(sender.value / step) * step
+        sender.value = roundedValue
+
+        let value = Int(roundedValue)
         settingsManager.staticHeadroom = value
-        
+
         if let sectionIndex = sectionTitles.firstIndex(of: "Exploit"),
            let rowIndex = tableData[sectionIndex].firstIndex(of: "Static Headroom") {
-            
+
             let indexPath = IndexPath(row: rowIndex, section: sectionIndex)
-            
+
             if let cell = tableView.cellForRow(at: indexPath) {
                 cell.detailTextLabel?.text = "\(value) MB"
             }
         }
     }
-    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cellText = tableData[indexPath.section][indexPath.row]
@@ -137,6 +144,9 @@ class OptionsViewController: UIViewController, UITableViewDelegate, UITableViewD
         case "About":
             let aboutView = AboutViewController()
             navigationController?.pushViewController(aboutView, animated: true)
+        case "Changelogs":
+            let cView = ChangelogViewController()
+            navigationController?.pushViewController(cView, animated: true)
         default:
             break
         }

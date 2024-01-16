@@ -11,18 +11,19 @@ import UIKit
 
 class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var tableData = [[String]]()
-
+    
     
     let sectionTitles = ["App", "Credits", "Acknowledgements"]
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
         self.title = "About"
-        tableView.tableHeaderView = configureHeaderView()
+        let headerView = AboutHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 100))
+        tableView.tableHeaderView = headerView
         
         view.addSubview(tableView)
         view.addConstraints([
@@ -37,7 +38,7 @@ class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let headerView = CustomSectionHeader(title: title)
         return headerView
     }
-
+    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
@@ -45,7 +46,7 @@ class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDat
             tableView.frame = view.bounds
         }
     }
-
+    
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return sectionTitles.count
@@ -56,19 +57,19 @@ class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDat
         case "Credits":
             return CreditsData.getCreditsData().count
         case "App":
-            return 2
+            return 1
         case "Acknowledgements":
             return 1
         default:
             return 0
         }
     }
-
+    
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sectionTitles[section]
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let reuseIdentifier = "Cell"
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) ?? UITableViewCell(style: .value1, reuseIdentifier: reuseIdentifier)
@@ -89,20 +90,9 @@ class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
             return personCell
         case "App":
-            let AppItems = ["Changelog", "FAQ"]
-            let item = AppItems[indexPath.row]
+            cell.textLabel?.text = "Frequently asked Questions"
+            cell.accessoryView = createAccessoryView(systemImageName: "safari")
             
-            switch item {
-            case "Changelog":
-                cell.textLabel?.text = "Changelogs"
-                cell.accessoryView = createAccessoryView(systemImageName: "doc.plaintext")
-            case "FAQ":
-                cell.textLabel?.text = "Frequently asked Questions"
-                cell.accessoryView = createAccessoryView(systemImageName: "safari")
-            default:
-                break
-            }
-
         case "Acknowledgements":
             cell.textLabel?.text = "Licensing"
             cell.accessoryType = .disclosureIndicator
@@ -123,23 +113,15 @@ class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 UIApplication.shared.open(socialLink, options: [:], completionHandler: nil)
             }
         case "App":
-            let AppItems = ["Changelog", "FAQ"]
-            let item = AppItems[indexPath.row]
-            
-            switch item {
-            case "Changelog":
-                let cView = ChangelogViewController()
-                navigationController?.pushViewController(cView, animated: true)
-            case "FAQ":
-                UIApplication.shared.open(URL(string: "https://example.com")!, completionHandler: nil)
-            default:
-                break
-            }
+            UIApplication.shared.open(URL(string: "https://example.com")!, completionHandler: nil)
+        case "Acknowledgements":
+            let lView = LicensesViewController()
+            navigationController?.pushViewController(lView, animated: true)
         default:
             break
         }
     }
-
+    
     
     func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         switch section {

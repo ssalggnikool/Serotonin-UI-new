@@ -133,52 +133,14 @@ class PersonCell: UITableViewCell {
     }
 }
 
-extension AboutViewController {
-    func configureHeaderView() -> UIView {
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 100))
-        headerView.backgroundColor = .clear
-
-        var title = ""
-        var versionString = ""
-
-        if let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String,
-            let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
-            let buildVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
-            title = appName
-            versionString = "Version \(appVersion) (Build \(buildVersion))"
-        }
-
-        let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: headerView.frame.width, height: 0))
-        titleLabel.text = title
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 22)
-        titleLabel.textColor = UIColor.label
-        titleLabel.numberOfLines = 0
-        titleLabel.sizeToFit()
-        titleLabel.center = CGPoint(x: headerView.center.x, y: headerView.center.y - titleLabel.frame.height / 2)
-
-        let versionLabel = UILabel(frame: CGRect(x: 0, y: 0, width: headerView.frame.width, height: 0))
-        versionLabel.text = versionString
-        versionLabel.font = UIFont.systemFont(ofSize: 14)
-        versionLabel.textColor = UIColor.secondaryLabel
-        versionLabel.numberOfLines = 0
-        versionLabel.sizeToFit()
-        versionLabel.center = CGPoint(x: headerView.center.x, y: headerView.center.y + versionLabel.frame.height / 2)
-
-        headerView.addSubview(titleLabel)
-        headerView.addSubview(versionLabel)
-        headerView.center.x = view.center.x
-
-        return headerView
+func createAccessoryView(systemImageName: String) -> UIView {
+    if let arrowImage = UIImage(systemName: systemImageName)?.withTintColor(UIColor.tertiaryLabel, renderingMode: .alwaysOriginal) {
+        let accessoryView = UIImageView(image: arrowImage)
+        return accessoryView
     }
-    
-    func createAccessoryView(systemImageName: String) -> UIView {
-        if let arrowImage = UIImage(systemName: systemImageName)?.withTintColor(UIColor.tertiaryLabel, renderingMode: .alwaysOriginal) {
-            let accessoryView = UIImageView(image: arrowImage)
-            return accessoryView
-        }
-        return UIView()
-    }
+    return UIView()
 }
+
 
 extension UIColor {
     convenience init(hex: String, alpha: CGFloat = 1.0) {
@@ -194,5 +156,54 @@ extension UIColor {
         let blue = CGFloat(rgb & 0x0000FF) / 255.0
 
         self.init(red: red, green: green, blue: blue, alpha: alpha)
+    }
+}
+
+class AboutHeaderView: UIView {
+    private var titleLabel: UILabel!
+    private var versionLabel: UILabel!
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configureHeaderView()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        configureHeaderView()
+    }
+
+    func configureHeaderView() {
+        backgroundColor = .clear
+
+        var title = ""
+        var versionString = ""
+
+        if let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String,
+            let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
+            let buildVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
+            title = appName
+            versionString = "Version \(appVersion) (Build \(buildVersion))"
+        }
+
+        titleLabel = UILabel()
+        titleLabel.text = title
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 22)
+        titleLabel.textColor = UIColor.label
+        titleLabel.numberOfLines = 0
+        titleLabel.sizeToFit()
+        titleLabel.center = CGPoint(x: center.x, y: center.y - titleLabel.frame.height / 2)
+
+        versionLabel = UILabel()
+        versionLabel.text = versionString
+        versionLabel.font = UIFont.systemFont(ofSize: 14)
+        versionLabel.textColor = UIColor.secondaryLabel
+        versionLabel.numberOfLines = 0
+        versionLabel.sizeToFit()
+        versionLabel.center = CGPoint(x: center.x, y: center.y + versionLabel.frame.height / 2)
+
+        addSubview(titleLabel)
+        addSubview(versionLabel)
+        center.x = superview?.center.x ?? 0
     }
 }

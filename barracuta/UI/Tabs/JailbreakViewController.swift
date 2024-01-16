@@ -8,31 +8,32 @@
 
 import UIKit
 
-class JailbreakViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class JailbreakViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, LoggerDelegate {
 
     let tableView = UITableView()
-    let cellReuseIdentifier = "TableCell"
-    var data: [String] = []
+    let cellReuseIdentifier = "Cell"
+
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        
-        
+
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
         tableView.delegate = self
         view.addSubview(tableView)
-        
+
         let toolbar = UIToolbar(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: 44.0)))
         toolbar.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(toolbar)
-        
+
         let toolbarHeight: CGFloat = 70
-        
+
         let jbButton = jbButton(state: .jailbreak)
+        jbButton.delegate = self
         let fileListHeaderItem = UIBarButtonItem(customView: jbButton)
-        
+
         toolbar.setItems([fileListHeaderItem], animated: false)
         
         NSLayoutConstraint.activate([
@@ -46,112 +47,68 @@ class JailbreakViewController: UIViewController, UITableViewDelegate, UITableVie
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 80, right: 0)
         
-        
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
+        Logger.shared.delegate = self
+
+        tableView.separatorStyle = .none
+        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: "Cell")
+        Logger.shared.log(logType: .standard, subTitle: "Supported Versions: 16.0 - 16.6.1")
         tableView.reloadData()
-
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath)
-        data = Array(repeating: "Cell", count: 20)
-        cell.textLabel?.text = data[indexPath.row]
-        return cell
-    }
-}
-
-enum ButtonState {
-    case done
-    case jailbreak
-    case jailbreaking
-    case error
-    case unsupported
-}
-
-class jbButton: UIButton {
-    
-    private var currentState: ButtonState
-    private var activityIndicator: UIActivityIndicatorView!
-
-    init(state: ButtonState) {
-        self.currentState = state
-        super.init(frame: .zero)
-        
-        configureButton(for: state)
-        addTarget(self, action: #selector(jbTapped), for: .touchUpInside)
-    }
-    
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-    
-    private func configureButton(for state: ButtonState) {
-
-        UIView.animate(withDuration: 0.2) {
-            self.alpha = 0.2
-        } completion: { _ in
-            self.layer.cornerRadius = 10
-            self.frame = CGRect(x: 0, y: 0, width: 0, height: 40)
-            self.setTitleColor(.white, for: .normal)
-            self.layer.borderWidth = 0
-
-            switch state {
-            case .done:
-                self.backgroundColor = .systemGreen
-                self.setTitle("Userspace Reboot", for: .normal)
-            case .jailbreak:
-                self.backgroundColor = .systemPink
-                self.setTitle("Jailbreak", for: .normal)
-            case .jailbreaking:
-                self.isEnabled = false
-                self.backgroundColor = .systemPink.withAlphaComponent(0.2)
-                self.setTitle("", for: .normal)
-                self.layer.borderWidth = 1
-                self.layer.borderColor = UIColor.systemPink.withAlphaComponent(0.6).cgColor
-                self.showLoadingIndicator()
-            case .error:
-                self.isEnabled = false
-                self.backgroundColor = .systemOrange.withAlphaComponent(0.2)
-                self.setTitle("Error", for: .normal)
-                self.setTitleColor(.systemOrange, for: .normal)
-                self.layer.borderWidth = 1
-                self.layer.borderColor = UIColor.systemOrange.withAlphaComponent(0.6).cgColor
-            case .unsupported:
-                self.isEnabled = false
-                self.backgroundColor = .systemPink.withAlphaComponent(0.2)
-                self.setTitle("Unsupported", for: .normal)
-                self.setTitleColor(.systemPink, for: .normal)
-                self.layer.borderWidth = 1
-                self.layer.borderColor = UIColor.systemPink.withAlphaComponent(0.6).cgColor
-            }
-
-            UIView.animate(withDuration: 0.3) { self.alpha = 1.0 }
+    func didAddNewLog() {
+        DispatchQueue.main.async {
+            UIView.transition(with: self.tableView,
+                              duration: 0.3,
+                              options: .transitionCrossDissolve,
+                              animations: {
+                self.tableView.reloadData()
+                let indexPath = IndexPath(row: Logger.shared.data.count - 1, section: 0)
+                self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
+            }, completion: nil)
         }
     }
 
 
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return Logger.shared.data.count
+    }
 
-    private func showLoadingIndicator() {
-        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .medium)
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(activityIndicator)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! CustomTableViewCell
+        cell.configure(with: Logger.shared.data[indexPath.row])
+        return cell
+    }
+}
 
-        NSLayoutConstraint.activate([
-            activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor)
-        ])
+extension JailbreakViewController: JBButtonDelegate {
+    func jbButtonDidFinishAction(_ button: jbButton) {
+        button.updateButtonState(.jailbreaking)
+        Logger.shared.log(logType: .warning, subTitle: "meow")
+        DispatchQueue.global().async {
+            let randomNumber = Int.random(in: 0...1)
+            Logger.shared.log(logType: .warning, subTitle: "meo1w")
 
-        activityIndicator.startAnimating()
+            sleep(2)
+            Logger.shared.log(logType: .warning, subTitle: "meow3")
+            Logger.shared.log(logType: .standard, subTitle: "meow33")
+            Logger.shared.log(logType: .success, subTitle: "meow32")
+
+            DispatchQueue.main.async {
+                if randomNumber == 0 {
+                    Logger.shared.log(logType: .success, subTitle: "Done!1")
+                    button.updateButtonState(.done)
+                } else {
+                    Logger.shared.log(logType: .error, subTitle: "Error with code: meow")
+                    self.simulateError()
+                    button.updateButtonState(.error)
+                }
+            }
+        }
     }
     
-    @objc private func jbTapped() {
-        let generator = UINotificationFeedbackGenerator()
-        generator.notificationOccurred(.success)
-        currentState = .jailbreaking
-        self.configureButton(for: self.currentState)
-        print("test")
+    private func simulateError() {
+        print("Button finished action with an error")
     }
 }
